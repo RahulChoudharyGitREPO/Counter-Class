@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Counter</title>
+</head>
+<body>
+  <div style="display: flex; justify-content: center; align-items: center; ">
+   <h1>Counter: <span id="count">0</span></h1>
+   <button id="control">Start/Stop</button>
+   <button id="increase">Increment</button>
+   <button id="decrease">Decrement</button>
+ </div>
+  <script>
+    class Counter {
+      constructor(initialValue = 0) {
+        this.count = initialValue;
+        this.intervalId = null; 
+        this.isAutomatic = true; 
+        this.startStopButton = document.getElementById('control');
+        this.startStopButton.addEventListener('click', this.toggleMode.bind(this));
+        this.increaseButton = document.getElementById('increase');
+        this.increaseButton.addEventListener('click', this.increment.bind(this));
+        this.decreaseButton = document.getElementById('decrease');
+        this.decreaseButton.addEventListener('click', this.decrement.bind(this));
+      }
+
+      startAutomatic() {
+        this.intervalId = setInterval(() => {
+          this.increment();
+        }, 1000);
+      }
+
+      stopAutomatic() {
+        clearInterval(this.intervalId);
+        this.increaseButton.disabled = true;
+        this.decreaseButton.disabled = true;
+      }
+
+      toggleMode() {
+        if (this.isAutomatic) {
+          this.stopAutomatic();
+          this.startStopButton.textContent = "Start";
+          this.isAutomatic = false;
+        } else {
+          this.startAutomatic();
+          this.startStopButton.textContent = "Stop";
+          this.isAutomatic = true;
+          this.disableManualButtons(false); 
+        }
+      }
+
+     
+      increment() {
+        this.count++;
+        document.getElementById('count').textContent = this.count;
+        this.disableManualButtons(this.isAutomatic); 
+      }
+
+   
+      decrement() {
+        this.count--;
+        document.getElementById('count').textContent = this.count;
+        this.disableManualButtons(this.isAutomatic);
+      }
+
+     
+      disableManualButtons(disabled) {
+        this.increaseButton.disabled = disabled;
+        this.decreaseButton.disabled = disabled;
+      }
+    }
+
+    const counter = new Counter(); 
+  </script>
+</body>
+</html>
